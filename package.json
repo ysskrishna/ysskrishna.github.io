@@ -1,0 +1,12 @@
+{
+  "name": "ysskrishna-github-io",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "node scripts/sync-profile.mjs"
+  },
+  "dependencies": {
+    "marked": "^15.0.0"
+  }
+}

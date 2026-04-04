@@ -1,0 +1,40 @@
+name: Sync Profile README To HTML
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 */7 * *"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate index.html
+        run: npm run sync
+
+      - name: Commit and push if changed
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No changes in index.html"
+            exit 0
+          fi
+
+          git add index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sync profile README to index.html"
+          git push
