@@ -1,10 +1,31 @@
 {
   "name": "ysskrishna-github-io",
   "version": "1.0.0",
+  "description": "Personal website for Y. Siva Sai Krishna.",
   "private": true,
   "type": "module",
+  "author": {
+    "name": "ysskrishna",
+    "url": "https://github.com/ysskrishna"
+  },
+  "license": "MIT",
+  "homepage": "https://ysskrishna.github.io/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ysskrishna/ysskrishna.github.io.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ysskrishna/ysskrishna.github.io/issues"
+  },
+  "keywords": [
+    "github-pages",
+    "profile",
+    "seo",
+    "json-ld"
+  ],
   "scripts": {
-    "sync": "node scripts/sync-profile.mjs"
+    "sync": "node scripts/sync-profile.mjs",
+    "build": "npm run sync"
   },
   "dependencies": {
     "marked": "^15.0.0"

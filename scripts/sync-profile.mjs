@@ -5,6 +5,25 @@ const README_URL =
   "https://raw.githubusercontent.com/ysskrishna/ysskrishna/main/README.md";
 const OUTPUT_PATH = "index.html";
 const SITE_URL = "https://ysskrishna.github.io/";
+const PROFILE = {
+  name: "Y. Siva Sai Krishna",
+  username: "ysskrishna",
+  bio: "I build AI-powered applications and robust backend systems that power modern web experiences. With deep expertise in AI/ML integration, Python (FastAPI, Flask), Node.js, and cloud infrastructure, I architect intelligent solutions that combine cutting-edge AI capabilities with scalable engineering.",
+  image: "https://ysskrishna-assets.vercel.app/ysskrishna.webp",
+  email: "sivasaikrishnassk@gmail.com",
+  website: "https://ysskrishna.vercel.app",
+  location: "Bengaluru, India",
+  sameAs: [
+    "https://github.com/ysskrishna",
+    "https://linkedin.com/in/ysskrishna",
+    "https://www.producthunt.com/@ysskrishna",
+    "https://www.youtube.com/@ysskrishna",
+    "https://pypi.org/user/ysskrishna",
+    "https://www.patreon.com/cw/ysskrishna",
+    "https://huggingface.co/ysskrishna",
+    "https://ysskrishna.substack.com/"
+  ]
+};
 
 const baseCss = `
   :root { color-scheme: light dark; }
@@ -23,24 +42,72 @@ const baseCss = `
   code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
 `;
 
-function htmlDocument(renderedMarkdown) {
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function buildSeo(profile) {
+  const title = `${profile?.name} | ${profile?.username}`;
+  const description = profile?.bio;
+  const canonical = SITE_URL;
+  const image = profile?.image;
+  const siteName = new URL(canonical).hostname;
+
+  return {
+    title,
+    description,
+    canonical,
+    image,
+    siteName
+  };
+}
+
+function buildJsonLd(profile, seo) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: profile?.name,
+    alternateName: profile?.username,
+    description: seo.description,
+    url: profile?.website,
+    image: seo.image,
+    email: profile?.email,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: profile?.location
+    },
+    sameAs: profile?.sameAs
+  };
+
+  return JSON.stringify(jsonLd).replaceAll("</script>", "<\\/script>");
+}
+
+function htmlDocument(renderedMarkdown, seo, jsonLd) {
   return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Siva Sai Krishna | ysskrishna</title>
-  <meta name="description" content="AI-focused full stack developer profile mirrored from GitHub README." />
-  <link rel="canonical" href="${SITE_URL}" />
+  <title>${escapeHtml(seo.title)}</title>
+  <meta name="description" content="${escapeHtml(seo.description)}" />
+  <link rel="canonical" href="${escapeHtml(seo.canonical)}" />
   <meta name="robots" content="index,follow" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Siva Sai Krishna | ysskrishna" />
-  <meta property="og:description" content="AI-focused full stack developer profile mirrored from GitHub README." />
-  <meta property="og:url" content="${SITE_URL}" />
-  <meta property="og:site_name" content="ysskrishna.github.io" />
+  <meta property="og:title" content="${escapeHtml(seo.title)}" />
+  <meta property="og:description" content="${escapeHtml(seo.description)}" />
+  <meta property="og:url" content="${escapeHtml(seo.canonical)}" />
+  <meta property="og:site_name" content="${escapeHtml(seo.siteName)}" />
+  <meta property="og:image" content="${escapeHtml(seo.image)}" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Siva Sai Krishna | ysskrishna" />
-  <meta name="twitter:description" content="AI-focused full stack developer profile mirrored from GitHub README." />
+  <meta name="twitter:title" content="${escapeHtml(seo.title)}" />
+  <meta name="twitter:description" content="${escapeHtml(seo.description)}" />
+  <meta name="twitter:image" content="${escapeHtml(seo.image)}" />
+  <script type="application/ld+json">${jsonLd}</script>
   <style>${baseCss}</style>
 </head>
 <body>
@@ -69,11 +136,12 @@ async function run() {
     gfm: true,
     breaks: false
   });
+  const seo = buildSeo(PROFILE);
+  const jsonLd = buildJsonLd(PROFILE, seo);
   const markdown = await fetchReadme();
   const rendered = marked.parse(markdown);
-  const html = htmlDocument(rendered);
+  const html = htmlDocument(rendered, seo, jsonLd);
   await writeFile(OUTPUT_PATH, html, "utf8");
-  console.log(`Generated ${OUTPUT_PATH} from ${README_URL}`);
 }
 
 run().catch((error) => {
