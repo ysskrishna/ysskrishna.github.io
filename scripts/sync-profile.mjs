@@ -10,6 +10,14 @@ const PROFILE = {
   username: "ysskrishna",
   bio: "I build AI-powered applications and robust backend systems that power modern web experiences. With deep expertise in AI/ML integration, Python (FastAPI, Flask), Node.js, and cloud infrastructure, I architect intelligent solutions that combine cutting-edge AI capabilities with scalable engineering.",
   image: "https://ysskrishna-assets.vercel.app/ysskrishna.webp",
+  /** Shown on social previews; keep in sync with the hero/OG image meaning. */
+  imageAlt: "Y. Siva Sai Krishna portfolio preview image",
+  favicon: "https://ysskrishna.vercel.app/favicon.ico",
+  appleTouchIcon: "https://ysskrishna.vercel.app/logo.png",
+  themeColorLight: "#ffffff",
+  themeColorDark: "#000000",
+  /** Google Search Console property token for ysskrishna.github.io; leave empty to omit. */
+  googleSiteVerification: "3Uju8-r5MKD3qHVptGKrNERow3jCsLWpIOYGgMut3yI",
   email: "sivasaikrishnassk@gmail.com",
   website: "https://ysskrishna.vercel.app",
   location: "Bengaluru, India",
@@ -52,18 +60,21 @@ function escapeHtml(value) {
 }
 
 function buildSeo(profile) {
-  const title = `${profile?.name} | ${profile?.username}`;
-  const description = profile?.bio;
   const canonical = SITE_URL;
-  const image = profile?.image;
-  const siteName = new URL(canonical).hostname;
-
   return {
-    title,
-    description,
+    title: `${profile.name} | ${profile.username}`,
+    description: profile.bio,
     canonical,
-    image,
-    siteName
+    image: profile.image,
+    siteName: new URL(canonical).hostname,
+    imageAlt: profile.imageAlt,
+    favicon: profile.favicon,
+    appleTouchIcon: profile.appleTouchIcon,
+    themeColorLight: profile.themeColorLight,
+    themeColorDark: profile.themeColorDark,
+    googleSiteVerification: profile.googleSiteVerification,
+    author: profile.name,
+    creator: profile.username
   };
 }
 
@@ -96,17 +107,26 @@ function htmlDocument(renderedMarkdown, seo, jsonLd) {
   <title>${escapeHtml(seo.title)}</title>
   <meta name="description" content="${escapeHtml(seo.description)}" />
   <link rel="canonical" href="${escapeHtml(seo.canonical)}" />
+  <link rel="icon" href="${escapeHtml(seo.favicon)}" sizes="any" />
+  <link rel="apple-touch-icon" href="${escapeHtml(seo.appleTouchIcon)}" />
   <meta name="robots" content="index,follow" />
+  <meta name="author" content="${escapeHtml(seo.author)}" />
+  <meta name="creator" content="${escapeHtml(seo.creator)}" />
+  <meta name="theme-color" content="${escapeHtml(seo.themeColorLight)}" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="${escapeHtml(seo.themeColorDark)}" media="(prefers-color-scheme: dark)" />
+  <meta name="google-site-verification" content="${escapeHtml(seo.googleSiteVerification)}" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="${escapeHtml(seo.title)}" />
   <meta property="og:description" content="${escapeHtml(seo.description)}" />
   <meta property="og:url" content="${escapeHtml(seo.canonical)}" />
   <meta property="og:site_name" content="${escapeHtml(seo.siteName)}" />
   <meta property="og:image" content="${escapeHtml(seo.image)}" />
+  <meta property="og:image:alt" content="${escapeHtml(seo.imageAlt)}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${escapeHtml(seo.title)}" />
   <meta name="twitter:description" content="${escapeHtml(seo.description)}" />
   <meta name="twitter:image" content="${escapeHtml(seo.image)}" />
+  <meta name="twitter:image:alt" content="${escapeHtml(seo.imageAlt)}" />
   <script type="application/ld+json">${jsonLd}</script>
   <style>${baseCss}</style>
 </head>
