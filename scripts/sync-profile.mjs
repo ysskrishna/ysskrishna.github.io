@@ -6,18 +6,18 @@ const README_URL =
 const OUTPUT_PATH = "index.html";
 const SITE_URL = "https://ysskrishna.github.io/";
 const PROFILE = {
-  name: "Y. Siva Sai Krishna",
+  name: "Siva Sai Krishna Yenugu",
   username: "ysskrishna",
   bio: "I build AI-powered applications and robust backend systems that power modern web experiences. With deep expertise in AI/ML integration, Python (FastAPI, Flask), Node.js, and cloud infrastructure, I architect intelligent solutions that combine cutting-edge AI capabilities with scalable engineering.",
   image: "https://ysskrishna-assets.vercel.app/ysskrishna.webp",
   /** Shown on social previews; keep in sync with the hero/OG image meaning. */
-  imageAlt: "Y. Siva Sai Krishna portfolio preview image",
+  imageAlt: "Siva Sai Krishna Yenugu portfolio preview image",
   favicon: "https://ysskrishna.vercel.app/favicon.ico",
   appleTouchIcon: "https://ysskrishna.vercel.app/logo.png",
   themeColorLight: "#f4f6fb",
   themeColorDark: "#0b0d12",
   /** Google Search Console property token for ysskrishna.github.io; leave empty to omit. */
-  googleSiteVerification: "3Uju8-r5MKD3qHVptGKrNERow3jCsLWpIOYGgMut3yI",
+  googleSiteVerification: "ICfb1XMVpLJZcn7JdUoaUsNZ-0D8LH1uztDuFd0VNfM",
   email: "sivasaikrishnassk@gmail.com",
   website: "https://ysskrishna.vercel.app/",
   /** Shown at the top of the generated page (GitHub Pages index). */
